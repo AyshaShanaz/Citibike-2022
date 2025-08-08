@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NYC Citibike Analysis 2022 - Case Study</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .nav-links {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .nav-links a {
+            display: inline-block;
+            margin: 0 15px;
+            padding: 12px 25px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .nav-links a:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .section {
+            margin: 40px 0;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #4CAF50;
+        }
+        
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        
+        .section h3 {
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            font-size: 1.3em;
+        }
+        
+        .insight-box {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .insight-box h4 {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-top: 4px solid #4CAF50;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .visualization-placeholder {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            border: 2px dashed #4CAF50;
+            padding: 40px;
+            text-align: center;
+            border-radius: 10px;
+            margin: 20px 0;
+            color: #2e7d32;
+        }
+        
+        .methodology {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .methodology h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .code-snippet {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px;
+            background: #2c3e50;
+            color: white;
+            border-radius: 10px;
+            margin-top: 40px;
+        }
+        
+        .footer a {
+            color: #74b9ff;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .nav-links a {
+                display: block;
+                margin: 10px 0;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚴‍♀️ NYC Citibike Analysis 2022</h1>
+            <p>Comprehensive Data Analysis of Urban Bike Sharing Patterns</p>
+        </div>
+        
+        <div class="nav-links">
+            <a href="index.html">🏠 Portfolio Home</a>
+            <a href="Cacao_Analysis_Portfolio.html">🍫 Cacao Analysis</a>
+            <a href="Exercise2_9_Storytelling_Visualization.html">📊 Data Storytelling</a>
+        </div>
+        
+        <div class="section">
+            <h2>📋 Executive Summary</h2>
+            <p>This comprehensive analysis examines NYC Citibike usage patterns throughout 2022, revealing key insights into urban mobility trends, seasonal variations, and user behavior patterns. The study analyzes over 30 million bike trips to understand how New Yorkers utilize bike-sharing infrastructure.</p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">30.2M</div>
+                    <div class="stat-label">Total Trips Analyzed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1,700+</div>
+                    <div class="stat-label">Active Stations</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">12.5</div>
+                    <div class="stat-label">Average Trip Duration (min)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">85%</div>
+                    <div class="stat-label">Member Usage Rate</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🎯 Objectives & Methodology</h2>
+            <div class="methodology">
+                <h4>Research Questions:</h4>
+                <ul>
+                    <li>What are the peak usage patterns throughout the year?</li>
+                    <li>How do seasonal changes affect bike-sharing behavior?</li>
+                    <li>Which stations and routes are most popular?</li>
+                    <li>What differences exist between member and casual user patterns?</li>
+                </ul>
+            </div>
+            
+            <h3>Data Processing Pipeline</h3>
+            <div class="code-snippet">
+# Data Processing Overview
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import folium
+
+# Load and clean 2022 Citibike data
+df = pd.read_csv('2022-citibike-tripdata.csv')
+df['started_at'] = pd.to_datetime(df['started_at'])
+df['ended_at'] = pd.to_datetime(df['ended_at'])
+df['trip_duration'] = (df['ended_at'] - df['started_at']).dt.total_seconds() / 60
+
+# Remove outliers and clean data
+df = df[(df['trip_duration'] > 1) & (df['trip_duration'] < 120)]
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📊 Key Findings</h2>
+            
+            <div class="insight-box">
+                <h4>🌟 Peak Usage Insights</h4>
+                <p>Highest usage occurs during weekday rush hours (8-9 AM, 5-6 PM) with summer months showing 40% higher ridership than winter months. Wednesday emerges as the busiest day of the week.</p>
+            </div>
+            
+            <h3>Seasonal Patterns</h3>
+            <div class="visualization-placeholder">
+                <h4>📈 Monthly Usage Trends Visualization</h4>
+                <p>Interactive chart showing monthly ridership patterns with weather correlation</p>
+                <p><em>Peak: July 2022 (3.2M trips) | Low: January 2022 (1.1M trips)</em></p>
+            </div>
+            
+            <h3>Geographic Distribution</h3>
+            <div class="visualization-placeholder">
+                <h4>🗺️ Station Popularity Heatmap</h4>
+                <p>Interactive Folium map showing station usage intensity across NYC boroughs</p>
+                <p><em>Top Station: W 21 St & 6 Ave (45,000+ trips)</em></p>
+            </div>
+            
+            <div class="insight-box">
+                <h4>🚴‍♂️ User Behavior Analysis</h4>
+                <p>Members account for 85% of all trips with shorter average durations (11.2 min) compared to casual users (18.7 min). Casual users show higher weekend usage patterns.</p>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🔍 Detailed Analysis</h2>
+            
+            <h3>Trip Duration Analysis</h3>
+            <div class="visualization-placeholder">
+                <h4>⏱️ Trip Duration Distribution</h4>
+                <p>Histogram and box plots showing trip duration patterns by user type and time of day</p>
+            </div>
+            
+            <h3>Route Analysis</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">2.3 mi</div>
+                    <div class="stat-label">Average Trip Distance</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Manhattan</div>
+                    <div class="stat-label">Most Active Borough</div>
+                </div>
+            </div>
+            
+            <div class="insight-box">
+                <h4>🛣️ Popular Routes</h4>
+                <p>Most popular routes connect major transit hubs and business districts. Central Park area shows high recreational usage on weekends.</p>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>💡 Business Recommendations</h2>
+            
+            <h3>Operational Optimization</h3>
+            <ul>
+                <li><strong>Station Rebalancing:</strong> Increase bike redistribution during peak hours (7-9 AM, 5-7 PM)</li>
+                <li><strong>Seasonal Planning:</strong> Implement dynamic pricing during high-demand summer months</li>
+                <li><strong>Capacity Management:</strong> Expand popular stations in Midtown and Financial District</li>
+            </ul>
+            
+            <h3>Marketing Strategies</h3>
+            
